@@ -66,3 +66,21 @@ Mahalliy ko‘rinish dalillari: [desktop](screenshots/landing-desktop.png), [tel
 ## Ochiq cheklovlar
 
 Haqiqiy Groq javobi va real Telegram yetkazilishi hozir tekshirilmagan — foydalanuvchi maxfiy kalitlar o‘rniga vaqtincha fake/ulanmagan rejimni tanlagan. Haqiqiy ikkinchi Google hisobida login va RLS browser oqimi o‘tkazilmagan; izolyatsiya real PostgreSQL rollarida va lokal API’da sinalgan. Sovuq start, uzoq muddatli uptime va yuqori yuklama bo‘yicha kafolat berilmaydi.
+
+## Foydalanuvchi qaydidan keyingi kengaytirilgan audit — 2026-10-19
+
+Faqat texnik yozuvni olib tashlash bilan cheklanilmadi. Avvalgi 4 ta UI testi qo‘shimcha oqimlarni qamramagan edi. Auditda topilgan va tuzatilgan muammolar:
+
+- Mehmon xatcho‘pdan login qilganda saqlash amali yo‘qolgan. Endi tekshirilgan kurs IDsi bilan amal tiklanadi.
+- Mehmon yordamchidan login qilganda yordamchi va savol yo‘qolgan. Savol/tajriba OAuth qaytishida ham tiklanadi.
+- Oldin ko‘rilgan kasb oddiy kirishda keraksiz ariza ochishiga sabab bo‘lgan. Login maqsadi alohida saqlanadi; oddiy kirish kabinetga olib boradi.
+- Landing bo‘limi va yordamchi textarea’si bir xil `interest` ID ishlatgan. Endi IDlar noyob va label to‘g‘ri formaga bog‘langan.
+- Savol yoki tajriba o‘zgartirilganda oldingi tavsiya ko‘rinishda qolgan. Endi eskirgan natija tozalanadi; so‘rov vaqtida forma tahriri cheklanadi.
+- Telegram o‘chirilganda avval yetkazilgan xabar holati ham “ulanmagan” deb chiqishi mumkin bo‘lgan. Saqlangan `sent` holati ustuvor; takror arizada ham haqiqiy ariza statusi ko‘rsatiladi.
+- Mobil menyu yordamchi/login ochilganda ochiq qolgan. Endi yopiladi.
+- Pastga aylantirilgan sahifadan ochilgan mobil dialog ekrandan chiqishi mumkin bo‘lgan. Dialog viewport’ga mahkamlandi; yangilangan mazmun tepadan boshlanadi.
+- Xatcho‘p saqlashda karta qayta montajlanishi va tugmaning vaqtincha disabled bo‘lishi klaviatura fokusini yo‘qotgan. Kartaning identity’si barqaror, takror amal bloklanadi va fokus saqlanadi.
+- Logout’dan keyin shu tabdagi qoralama boshqa hisobga qolishi mumkin bo‘lgan. Logout’da ariza qoralamalari o‘chiriladi. Kabinetning kechikkan javoblari eski holatni qayta yozmasligi uchun so‘rov versiyasi tekshiriladi.
+- Muhim matnlar 8–11px bo‘lgan; `#806f65` rangi shaftoli fonda 4.45:1 kontrast bergan. Matn/tugmalar kattalashtirildi, muted rang qoraytirildi, bosish maydonlari kengaytirildi.
+
+Yakuniy tekshiruv: **12/12 Playwright**, **9/9 unit/API** va production build o‘tdi. Axe avtomatik WCAG A/AA tekshiruvida landing, tafsilot, qo‘llanma, mobil menyu, login, bo‘sh kabinet va ariza formasida aniqlangan qoidabuzarlik qolmadi. Bu to‘liq qo‘lda accessibility auditi yoki barcha ehtimoliy xatolar yo‘qligiga kafolat emas. Sun’iy Telegram `sent` statusi UI testi haqiqiy xabar yuborilgani dalili emas.

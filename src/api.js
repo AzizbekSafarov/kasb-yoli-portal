@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 let authClient=null;
 export function setupAuth(config){
-  if(config.authReady && !config.demo)authClient=createClient(config.supabaseUrl,config.supabaseAnonKey,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  if(config.authReady && !config.demo && !authClient)authClient=createClient(config.supabaseUrl,config.supabaseAnonKey,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   return authClient;
 }
 export async function request(path,options={}) {

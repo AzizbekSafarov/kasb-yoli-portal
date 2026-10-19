@@ -1,0 +1,12 @@
+import { readConfig } from './config.js';
+import { createDemoRepository, createSupabaseRepository } from './repository.js';
+import { createApp } from './app.js';
+import { deliverNotification } from './services.js';
+const config=readConfig();
+const repo=config.demo?await createDemoRepository(config.dbPath):createSupabaseRepository(config);
+const app=createApp(config,repo);
+const server=app.listen(config.port,'0.0.0.0',()=>console.log(`Kasb yo‘li: http://localhost:${config.port} (${config.demo?'mahalliy sinov':'Supabase'})`));
+let working=false;
+const work=async()=>{if(working||!config.telegramReady)return;working=true;try{await repo.recover();for(const {id} of await repo.pending())await deliverNotification(repo,config,id);}catch{console.warn('notification_worker_unavailable');}finally{working=false;}};
+const interval=setInterval(work,30000);interval.unref();void work();
+for(const signal of ['SIGTERM','SIGINT'])process.on(signal,()=>{clearInterval(interval);server.close(()=>{repo.close?.();process.exit(0);});});

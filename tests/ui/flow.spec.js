@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 test('qidirish → tafsilot → kirish → ariza → reload → kabinet',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('/');await expect(page.getByRole('heading',{name:/Qiziqishingizni/})).toBeVisible();
+  await page.goto('/');await expect(page.getByRole('heading',{name:/Qiziqishingiz/})).toBeVisible();
   await page.getByRole('searchbox',{name:'Kasb yoki kurs qidirish'}).fill('mavjudemas');await expect(page.getByRole('heading',{name:'Hozircha topilmadi'})).toBeVisible();
   await page.getByRole('button',{name:'Barcha yo‘nalishlarni ko‘rish'}).click();
   await page.getByRole('searchbox',{name:'Kasb yoki kurs qidirish'}).fill('frontend');
@@ -31,5 +31,29 @@ test('filtrlar, qisqa mashq va 320–1440 px kengliklar',async({page})=>{
   await page.getByRole('radio',{name:'Dizayn va ijod'}).check();await page.getByRole('button',{name:'Menga mos yo‘lni topish'}).click();await expect(page.locator('.quiz-result')).toContainText('UI/UX dizayner');
   await page.getByRole('button',{name:'Dasturlash',exact:true}).click();await page.getByLabel('O‘qish shakli').selectOption('Gibrid');await expect(page.locator('.course-card')).toHaveCount(1);await expect(page.locator('.course-card')).toContainText('Python dasturchi');
   await page.getByRole('button',{name:'Barchasi',exact:true}).click();await page.getByLabel('O‘qish shakli').selectOption('Barchasi');
-  for(const width of [320,390,768,1024,1440]){await page.setViewportSize({width,height:900});await expect(page.getByRole('heading',{name:/Qiziqishingizni/})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`overflow ${width}`).toBe(true);await page.screenshot({path:`test-results/home-${width}.png`,fullPage:true});}
+  while(await page.getByRole('button',{name:'Harakatni to‘xtatish',exact:true}).count())await page.getByRole('button',{name:'Harakatni to‘xtatish',exact:true}).first().click();
+  for(const width of [320,390,768,1024,1440]){await page.setViewportSize({width,height:900});await expect(page.getByRole('heading',{name:/Qiziqishingiz/})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`overflow ${width}`).toBe(true);await page.screenshot({path:`test-results/home-${width}.png`,fullPage:true});}
+});
+test('nuqtali brend: to‘xtatish va reduced motion',async({page})=>{
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/');
+  await expect(page.locator('canvas[data-ready="true"]')).toHaveCount(2);
+  expect(Number(await page.locator('canvas').first().getAttribute('data-particles'))).toBeGreaterThan(500);
+  await page.getByRole('button',{name:'Harakatni to‘xtatish',exact:true}).first().click();await page.waitForTimeout(100);
+  const still=await page.locator('canvas').first().evaluate(canvas=>canvas.toDataURL());await page.waitForTimeout(180);
+  expect(await page.locator('canvas').first().evaluate(canvas=>canvas.toDataURL())).toBe(still);
+  await page.emulateMedia({reducedMotion:'reduce'});await page.locator('.particle-signature').scrollIntoViewIfNeeded();await page.waitForTimeout(100);
+  const reduced=await page.locator('canvas').last().evaluate(canvas=>canvas.toDataURL());await page.waitForTimeout(180);
+  expect(await page.locator('canvas').last().evaluate(canvas=>canvas.toDataURL())).toBe(reduced);
+  expect(errors).toEqual([]);
+});
+test('bekor qilingan login va server xatosida ochiq katalog',async({page})=>{
+  await page.goto('/auth/callback?error=access_denied');
+  await expect(page.locator('.toast')).toContainText('Kirish bekor qilindi');
+  await expect(page.getByRole('button',{name:'Kirish',exact:true})).toBeEnabled();
+  await page.route('**/api/config',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'Sun’iy xizmat xatosi.'})}));
+  await page.goto('/');await expect(page.getByRole('alert')).toContainText('Sun’iy xizmat xatosi');
+  await page.getByRole('searchbox',{name:'Kasb yoki kurs qidirish'}).fill('Python');
+  await expect(page.locator('.course-card')).toHaveCount(1);
+  await page.getByRole('button',{name:'Python dasturchi',exact:true}).click();
+  await expect(page.getByRole('dialog')).toContainText('Python bilan dasturlash');
 });

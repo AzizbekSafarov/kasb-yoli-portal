@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 test('qidirish → tafsilot → kirish → ariza → reload → kabinet',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');await expect(page.getByRole('heading',{name:/Qiziqishingiz/})).toBeVisible();
@@ -59,3 +59,4 @@ test('bekor qilingan login va server xatosida ochiq katalog',async({page})=>{
   await page.getByRole('button',{name:'Python dasturchi',exact:true}).click();
   await expect(page.getByRole('dialog')).toContainText('Python bilan dasturlash');
 });
+

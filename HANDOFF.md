@@ -2,7 +2,7 @@
 
 ## Tayyor natijalar
 
-Oxirgi audit: texnik kabinet belgisi olib tashlandi; login davomiyligi (favorite/apply/advice), noyob form IDsi, mobil dialog/menu, o‘qiluvchanlik/kontrast, eski tavsiya/status va fokus/qoralama muammolari tuzatildi. `src/usability.css` yakuniy o‘qiluvchanlik qatlami. Hozir **12 UI + 9 unit/API** test o‘tgan, Axe 7 ekran/holatda tekshirilgan. Batafsil yakuniy qayd VERIFICATION.md oxirida.
+Oxirgi audit: texnik kabinet belgisi olib tashlandi; login davomiyligi (favorite/apply/advice), noyob form IDsi, mobil dialog/menu, o‘qiluvchanlik/kontrast, eski tavsiya/status va fokus/qoralama muammolari tuzatildi. `src/usability.css` yakuniy o‘qiluvchanlik qatlami. Davomida sessiya tugashidan tiklanish, offline ariza retry, kabinet 503/401 va sekin Telegram ajratilishi tekshirildi. Hozir **18 UI + 11 unit/API** test o‘tgan, Axe 7 ekran/holatda tekshirilgan. Telegram saqlash javobidan keyin yuboriladi; xabar holati kabinet yangilanganda ko‘rinadi. Batafsil yakuniy qayd VERIFICATION.md oxirida.
 
 - Jonli sayt: https://kasb-yoli-portal.onrender.com
 - Source: https://github.com/AzizbekSafarov/kasb-yoli-portal

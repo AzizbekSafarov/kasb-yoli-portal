@@ -10,7 +10,7 @@ import { advise, deliverNotification } from './services.js';
 const cookieToken=req=>req.headers.cookie?.split(';').find(x=>x.trim().startsWith('ky_demo='))?.trim().slice(8);
 const goalSchema=z.object({courseId:z.string().refine(id=>Boolean(courseById(id))),goal:z.string().trim().min(15).max(600)}).strict();
 const adviceInput=z.object({interest:z.string().trim().min(3).max(600),experience:z.enum(['new','some','experienced'])}).strict();
-export function createApp(config,repo) {
+export function createApp(config,repo,{notify=deliverNotification}={}) {
   const app=express();
   app.disable('x-powered-by'); app.set('trust proxy',1);
   app.use(helmet({contentSecurityPolicy:{directives:{defaultSrc:["'self'"],scriptSrc:["'self'"],styleSrc:["'self'","'unsafe-inline'"],fontSrc:["'self'"],imgSrc:["'self'",'data:'],connectSrc:["'self'",...(config.supabaseUrl?[config.supabaseUrl]:[])],objectSrc:["'none'"],frameAncestors:["'none'"],upgradeInsecureRequests:config.production?[]:null}},strictTransportSecurity:config.production?undefined:false}));
@@ -38,10 +38,10 @@ export function createApp(config,repo) {
     const parsed=goalSchema.safeParse(req.body);if(!parsed.success)return res.status(400).json({error:'Kursni tanlang va maqsadingizni 15–600 ta belgi bilan yozing.'});
     const result=await repo.apply(req.user,parsed.data.courseId,parsed.data.goal);
     // A committed application is returned even if notification delivery fails.
-    if(config.telegramReady) { try {await deliverNotification(repo,config,result.application.id);}catch{console.warn(JSON.stringify({requestId:req.requestId,event:'notification_status_unavailable'}));} }
-    let application=result.application;
-    try{application=await repo.application(req.user,application.id)||application;}catch{}
-    res.status(result.created?201:200).json({application,created:result.created});
+    res.status(result.created?201:200).json(result);
+    // Delivery runs after the saved response. Pending rows survive a process restart
+    // and are recovered by the outbox worker; a slow provider never blocks saving.
+    if(config.telegramReady)void notify(repo,config,result.application.id).catch(()=>console.warn(JSON.stringify({requestId:req.requestId,event:'notification_status_unavailable'})));
   });
   app.post('/api/applications/:id/notification',authenticate,async(req,res)=>{
     if(!z.uuid().safeParse(req.params.id).success)return res.status(404).json({error:'Ariza topilmadi.'});

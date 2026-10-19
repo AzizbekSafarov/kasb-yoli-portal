@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 import AxeBuilder from '@axe-core/playwright';
 test('asosiy ekranlar va dialoglarda accessibility',async({page})=>{
   await page.goto('/');await expect(page.getByRole('button',{name:'Kirish',exact:true})).toBeEnabled();
@@ -11,3 +11,4 @@ test('asosiy ekranlar va dialoglarda accessibility',async({page})=>{
   await scan('empty cabinet');await page.getByRole('link',{name:'Kurs tanlash',exact:true}).click();
   await page.getByRole('button',{name:'Frontend dasturchi',exact:true}).click();await page.getByRole('button',{name:'Kursga ariza berish',exact:true}).click();await scan('application');
 });
+

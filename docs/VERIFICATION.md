@@ -84,3 +84,18 @@ Faqat texnik yozuvni olib tashlash bilan cheklanilmadi. Avvalgi 4 ta UI testi qo
 - Muhim matnlar 8–11px bo‘lgan; `#806f65` rangi shaftoli fonda 4.45:1 kontrast bergan. Matn/tugmalar kattalashtirildi, muted rang qoraytirildi, bosish maydonlari kengaytirildi.
 
 Yakuniy tekshiruv: **12/12 Playwright**, **9/9 unit/API** va production build o‘tdi. Axe avtomatik WCAG A/AA tekshiruvida landing, tafsilot, qo‘llanma, mobil menyu, login, bo‘sh kabinet va ariza formasida aniqlangan qoidabuzarlik qolmadi. Bu to‘liq qo‘lda accessibility auditi yoki barcha ehtimoliy xatolar yo‘qligiga kafolat emas. Sun’iy Telegram `sent` statusi UI testi haqiqiy xabar yuborilgani dalili emas.
+
+### Davomi: sessiya va tashqi xizmat nosozliklari
+
+Keyingi tekshiruvdan so‘ng **18/18 brauzer testi**, **11/11 unit/API testi** o‘tdi; build muvaffaqiyatli.
+
+- Ariza so‘rovi 401 qaytarganda endi qayta kirish ochiladi; sun’iy maqsad qoralamasi qayta kirishdan keyin tiklandi.
+- Kabinet 401 qaytarganda oldingi shaxsiy yozuvlar yashirildi; 503 esa foydalanuvchini asossiz chiqarib yubormaydi. Supabase vaqtinchalik auth xizmat xatosi endi “login noto‘g‘ri” sifatida talqin qilinmaydi.
+- Tarmoq xatosi so‘rovni to‘xtatganda forma matni yo‘qolmadi, tarmoq tiklangach bir ariza saqlandi.
+- Kabinetga sun’iy 503 berilganda oldingi saqlangan natija turdi, “Qayta urinish”dan keyin xato tozalandi.
+- Tez ikki marta bosish UI’da bitta POST va bitta ariza yaratdi; database unique himoyasi ham oldingi testlarda tasdiqlangan.
+- Telegram javobi ataylab yakunlanmaydigan mock bilan saqlangan ariza javobi qaytishi tekshirildi. Notification endi response’dan keyin chiqadi; doimiy outbox va worker ishlashda davom etadi.
+- Mobil menyu Escape’da yopilib fokus menyu tugmasiga qaytdi; menyu tashqarisiga bosish ham yopdi.
+- Toast opacity animatsiyasi rang kontrastini vaqtincha tushirardi; opacity o‘tishi olib tashlandi, transform saqlandi.
+
+Katta test to‘plamida barcha brauzerlar bitta localhost IP’dan kelib, 80/min limitga urildi. Production limit o‘zgartirilmadi: testlar alohida mijozlarni reserved benchmarking IP’lari bilan modellashtiradi. Bir mijozning 81-so‘rovi 429 olishi, boshqa mijoz va /health ishlashi alohida API testida tasdiqlandi. Haqiqiy Google, Groq va Telegram chaqiruvlari bu yangi nosozlik testlarida qilinmadi; sintetik 401/503/tarmoq javoblari ishlatildi.

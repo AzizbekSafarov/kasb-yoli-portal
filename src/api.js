@@ -1,5 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 let authClient=null;
+export class ApiError extends Error{
+  constructor(message,status,path){super(message);this.name='ApiError';this.status=status;this.path=path;}
+}
 export function setupAuth(config){
   if(config.authReady && !config.demo && !authClient)authClient=createClient(config.supabaseUrl,config.supabaseAnonKey,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
   return authClient;
@@ -11,7 +14,7 @@ export async function request(path,options={}) {
   try { response=await fetch(`/api${path}`,{...options,headers,credentials:'same-origin',signal:AbortSignal.timeout(25000)}); }
   catch{throw new Error('Server bilan aloqa uzildi. Internetni tekshirib, qayta urinib ko‘ring.');}
   const body=await response.json().catch(()=>({error:'Server javobini o‘qib bo‘lmadi.'}));
-  if(!response.ok)throw new Error(body.error||'Amal bajarilmadi. Qayta urinib ko‘ring.');
+  if(!response.ok)throw new ApiError(body.error||'Amal bajarilmadi. Qayta urinib ko‘ring.',response.status,path);
   return body;
 }
 export async function loginGoogle(){

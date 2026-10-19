@@ -28,7 +28,7 @@ export function createSupabaseRepository(config) {
   const client = token => createClient(config.supabaseUrl,config.anonKey,{...opts,global:{...opts.global,headers:{Authorization:`Bearer ${token}`}}});
   const admin = config.serviceKey ? createClient(config.supabaseUrl,config.serviceKey,opts) : null;
   return {
-    async user(token) { if (!token) return null; const {data,error} = await client(token).auth.getUser(token); if (error || !data.user) return null; return {id:data.user.id,email:data.user.email,name:data.user.user_metadata?.full_name || 'Foydalanuvchi', token}; },
+    async user(token) { if (!token) return null; const {data,error} = await client(token).auth.getUser(token); if(error){if([400,401,403,422].includes(error.status))return null;throw new Error('auth_unavailable');}if(!data.user)return null;return {id:data.user.id,email:data.user.email,name:data.user.user_metadata?.full_name || 'Foydalanuvchi', token}; },
     async dashboard(user) { const sb=client(user.token); const [favorites,applications] = await Promise.all([sb.from('ky_favorites').select('course_id'),sb.from('ky_applications').select('id,course_id,goal,status,telegram_status,created_at').order('created_at',{ascending:false})]); return {favorites:check(favorites).map(x=>x.course_id),applications:check(applications)}; },
     async favorite(user,courseId,saved) { const sb=client(user.token); check(await (saved ? sb.from('ky_favorites').upsert({user_id:user.id,course_id:courseId},{onConflict:'user_id,course_id',ignoreDuplicates:true}) : sb.from('ky_favorites').delete().eq('user_id',user.id).eq('course_id',courseId))); },
     async apply(user,courseId,goal) { return check(await client(user.token).rpc('ky_submit_application',{p_course_id:courseId,p_goal:goal})); },

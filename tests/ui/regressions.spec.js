@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect} from './fixtures.js';
 
 test('kasbni ko‘rib yopgandan keyin oddiy kirish ariza formasini ochmaydi',async({page})=>{
   await page.goto('/');await page.getByRole('button',{name:'Frontend dasturchi',exact:true}).click();
@@ -54,3 +54,4 @@ test('saqlashda klaviatura fokusi yo‘qolmaydi va chiqishda qoralama tozalanadi
   await page.getByRole('button',{name:'Shaxsiy kabinet',exact:true}).click();await page.getByRole('button',{name:'Chiqish',exact:true}).click();await expect(page.locator('.toast')).toContainText('Hisobdan chiqdingiz');
   expect(await page.evaluate(()=>Object.keys(sessionStorage).some(k=>k.startsWith('ky_goal_')))).toBe(false);
 });
+

@@ -31,7 +31,7 @@ Google login’ni tugatmay qaytish xatosi ko‘rsatiladi. PKCE sessiya Supabase 
 
 `render.yaml` tayyor. GitHub reposini Render Web Service’ga ulang yoki Blueprint qo‘llang:
 
-- Node 24, build: `npm ci && npm run build`, start: `npm start`, health: `/health`.
+- Node 24, build: `npm ci --include=dev && npm run build`, start: `npm start`, health: `/health`.
 - `NODE_ENV=production`, `DEMO_MODE=false`, `APP_ORIGIN=https://ANIQ_DOMEN.onrender.com`.
 - Yuqoridagi Supabase o‘zgaruvchilarini Environment’ga kiriting. Server secrets’ni `VITE_` bilan boshlamang.
 - `GROQ_API_KEY`, `GROQ_MODEL` (standart `openai/gpt-oss-120b`), `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` keyin ulanadi.
@@ -66,3 +66,4 @@ HTTP(s) monitor URL: `https://DOMEN.onrender.com/health`, interval 5 daqiqa. `/h
 [Azizbek Safarov kutubxonasidagi Ziyo](https://azizbeksafarov.github.io/design/ziyo/) uslubi moslashtirildi: shaftoli qog‘oz, oq mazmun maydoni, olcha rangli mashq paneli, yumshoq asimmetrik burchaklar. Bree Serif sarlavhalari va Nunito Sans matni lokal saqlanadi; OFL litsenziyalari `public/fonts/` ichida. Illustratsiyalar ushbu loyiha uchun CSS va Lucide ikonalarida chizildi. Dizayn bahosi: impact 4, fit 5, feasibility 5, performance 5, consistency risk 4 → DFII 15. Bo‘sh joy 4/8px ritmida, qisqa hover va reduced-motion qo‘llanadi.
 
 Texnik manbalar: [Supabase Google](https://supabase.com/docs/guides/auth/social-login/auth-google), [RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), [Groq structured outputs](https://console.groq.com/docs/structured-outputs), [Telegram Bot API](https://core.telegram.org/bots/api#sendmessage), [Render Web Services](https://render.com/docs/web-services).
+

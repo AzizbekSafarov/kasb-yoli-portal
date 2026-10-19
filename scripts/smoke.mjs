@@ -7,5 +7,6 @@ for(const key of ['serviceKey','telegramToken','groqKey','SUPABASE_SERVICE_ROLE_
 assert.equal((await(await get('/api/catalog')).json()).courses.length,8);
 assert.equal((await get('/api/dashboard')).status,401);
 assert.equal((await get('/auth/callback')).status,200);
-for(const path of ['/privacy.html','/terms.html','/logo-120.png','/logo-64.png'])assert.equal((await get(path)).status,200,path);
+for(const path of ['/privacy.html','/terms.html','/logo-120.png','/logo-64.png']){const response=await get(path);assert.equal(response.status,200,path);if(path.endsWith('.png'))assert.match(response.headers.get('content-type'),/image\/png/,path);else assert.match(await response.text(),/Kasb yo‘li/,path);}
+const proof=await(await get('/google3795099e3c0dfe97.html')).text();assert.equal(proof.trim(),'google-site-verification: google3795099e3c0dfe97.html');
 console.log(JSON.stringify({origin,health:'ok',demo:config.demo,authReady:config.authReady,aiReady:config.aiReady,telegramReady:config.telegramReady,catalogCount:8,privateDashboard:401,staticAssets:'ok',serverSecretsExposed:false},null,2));

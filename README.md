@@ -1,5 +1,7 @@
 # Kasb yo‘li
 
+[Jonli portal](https://kasb-yoli-portal.onrender.com) · [Tahrirlanadigan source](https://github.com/AzizbekSafarov/kasb-yoli-portal) · [Tekshiruv qaydi](docs/VERIFICATION.md)
+
 O‘zbek tilidagi zamonaviy kasblar va ta’lim portali. MASHQ BILETI №1 uchun mustaqil loyiha; rasmiy tanlov mavzusi deb da’vo qilinmaydi. Katalogdagi 8 kasb va barcha kurslar **namunaviy**.
 
 ## Ishga tushirish
@@ -62,6 +64,8 @@ HTTP(s) monitor URL: `https://DOMEN.onrender.com/health`, interval 5 daqiqa. `/h
 - `HANDOFF.md` — joriy holat va keyingi ishlar.
 
 ## Dizayn va manbalar
+
+Foydalanuvchining yakuniy tanlovi bilan landing [Yuksal / SI](https://azizbeksafarov.github.io/design/si/) va SI.GOV’dagi nuqtali mexanikadan ilhomlanib yangilandi. Katta Instrument Serif tipografikasi, orbita → logo, pointer/tap to‘lqini va pastda nuqtalardan yig‘ilgan o‘z brendimiz bor. React Canvas implementatsiyasi mustaqil; davlat tashkilotlariga aloqadorlik da’vosi yo‘q. Pause va reduced-motion ishlaydi, ko‘rinmayotgan sahnalarda requestAnimationFrame to‘xtaydi. Shaffof logo header, favicon va Google Auth uchun bir xil. Katalog/kabinet dastlabki Ziyo uslubidagi qulay komponentlarni saqlaydi.
 
 [Azizbek Safarov kutubxonasidagi Ziyo](https://azizbeksafarov.github.io/design/ziyo/) uslubi moslashtirildi: shaftoli qog‘oz, oq mazmun maydoni, olcha rangli mashq paneli, yumshoq asimmetrik burchaklar. Bree Serif sarlavhalari va Nunito Sans matni lokal saqlanadi; OFL litsenziyalari `public/fonts/` ichida. Illustratsiyalar ushbu loyiha uchun CSS va Lucide ikonalarida chizildi. Dizayn bahosi: impact 4, fit 5, feasibility 5, performance 5, consistency risk 4 → DFII 15. Bo‘sh joy 4/8px ritmida, qisqa hover va reduced-motion qo‘llanadi.
 

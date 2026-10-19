@@ -44,6 +44,8 @@ test('nuqtali brend: to‘xtatish va reduced motion',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});await page.locator('.particle-signature').scrollIntoViewIfNeeded();await page.waitForTimeout(100);
   const reduced=await page.locator('canvas').last().evaluate(canvas=>canvas.toDataURL());await page.waitForTimeout(180);
   expect(await page.locator('canvas').last().evaluate(canvas=>canvas.toDataURL())).toBe(reduced);
+  await page.setViewportSize({width:1280,height:500});
+  expect((await page.locator('.particle-stage').boundingBox()).height).toBeGreaterThanOrEqual(300);
   expect(errors).toEqual([]);
 });
 test('bekor qilingan login va server xatosida ochiq katalog',async({page})=>{

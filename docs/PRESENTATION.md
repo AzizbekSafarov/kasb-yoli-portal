@@ -1,6 +1,6 @@
 # Taqdimot ssenariysi
 
-1. Bosh sahifa: portal yoshga qiziqishidan kasb va kursga o‘tishda yordam beradi. “Ziyo” kutubxona uslubi: o‘quv ustaxonasi, uch bosqichli yo‘l, olcha rangli qiziqish mashqi.
+1. Bosh sahifa: portal yoshga qiziqishidan kasb va kursga o‘tishda yordam beradi. Yakuniy landing Yuksal/SI.GOV’dagi nuqtali mexanikadan ilhomlangan: orbita → o‘z logomiz; pastda nuqtali Kasb yo‘li brendi. Pointer/tap, pause va reduced-motion’ni ko‘rsating. Qiziqish mashqi va uch bosqichli yo‘l ham ishlaydi.
 2. Katalogda “Frontend” qidiring, o‘qish shakli filtrini ko‘rsating. Kasbni ochib vazifa, ko‘nikma, davomiylik va namunaviy kursni ko‘rsating.
 3. “Kursga ariza berish” → Google orqali kirish. Mahalliy mashqda alohida belgilangan sinov hisobidan foydalanish mumkin, uni Google dalili deb aytmang.
 4. Sun’iy maqsad: “Sinov uchun shaxsiy portfolio yaratishni o‘rganmoqchiman.” Arizani yuboring, raqamini ko‘rsating.
